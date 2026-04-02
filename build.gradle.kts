@@ -1,6 +1,7 @@
+import org.gradle.internal.os.OperatingSystem
+
 plugins {
-    application
-    kotlin("jvm") version "2.3.0"
+    kotlin("multiplatform") version "2.3.0"
 }
 
 group = "morph"
@@ -11,14 +12,32 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(17)
-}
+    val hostOs = OperatingSystem.current()
+    val hostArch = System.getProperty("os.arch")
 
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-}
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 
-application {
-    mainClass = "morph.MainKt"
+    val nativeTarget = when {
+        hostOs.isWindows -> mingwX64("native")
+        hostOs.isLinux -> linuxX64("native")
+        hostOs.isMacOsX && hostArch == "aarch64" -> macosArm64("native")
+        hostOs.isMacOsX -> macosX64("native")
+        else -> error("Unsupported host OS: ${hostOs.name}")
+    }
+
+    nativeTarget.binaries {
+        executable {
+            baseName = "morph"
+            entryPoint = "morph.main"
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(kotlin("stdlib"))
+            implementation("com.squareup.okio:okio:3.10.2")
+        }
+    }
 }
