@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="natime-jvm-1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="natime-jvm-1.0-SNAPSHOT.jar">
+      <element id="module-output" name="natime.jvmMain" />
+    </root>
+  </artifact>
+</component>

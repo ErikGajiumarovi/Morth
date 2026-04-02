@@ -1,0 +1,6 @@
+impl FindUserImpl = unsafe {
+    match it.UserId {
+        UserId(id) -> Found(User(it.UserId, Email("stub@example.com"), Age(30)))
+        _ -> NotFound(it.UserId)
+    }
+}

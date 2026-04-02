@@ -1,0 +1,7 @@
+type UserId = UUID
+type Email = String where { it.contains("@") }
+type Age = Int where { it > 0 && it < 150 }
+type User = { UserId, Email, Age }
+
+type GetUserQuery : Query = { UserId }
+type GetUserResult : Result = Found(User) | NotFound(UserId)
